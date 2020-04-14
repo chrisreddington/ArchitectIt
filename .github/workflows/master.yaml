@@ -20,7 +20,7 @@ jobs:
     - run: npm install
       working-directory: ${{env.working-directory}}
     - run: npm run build
-    working-directory: ${{env.working-directory}}
+      working-directory: ${{env.working-directory}}
 #   publish:    
 #     runs-on: ubuntu-latest
 #     needs: build
