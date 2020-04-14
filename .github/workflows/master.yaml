@@ -21,27 +21,26 @@ jobs:
       working-directory: ${{env.working-directory}}
     - run: npm run build
       working-directory: ${{env.working-directory}}
-#   publish:    
-#     runs-on: ubuntu-latest
-#     needs: build
-#     steps:    
-#     - name: Download website changes
-#       uses: actions/download-artifact@v1
-#       with:
-#         name: website
-#     - name: Azure Login
-#       uses: azure/login@v1
-#       with:
-#         creds: ${{ secrets.AZURE_CREDENTIALS }}     
-#     - name: Azure CLI script
-#       uses: azure/CLI@v1
-#       with:
-#         azcliversion: 2.0.72
-#         inlineScript: |
-#           az storage blob upload-batch --account-name cloudwithchris -d '$web' -s website
-#     - name: Azure CLI script
-#       uses: azure/CLI@v1
-#       with:
-#         azcliversion: 2.0.72
-#         inlineScript: |
-#           az cdn endpoint purge --content-paths  "/*" --profile-name "cloudwithchris" --name "cloudwithchris" --resource-group "cloudwithchris"
+    - name: Upload website as Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: website
+        path: ./dist
+  publish:    
+    runs-on: ubuntu-latest
+    needs: build
+    steps:    
+    - name: Download website changes
+      uses: actions/download-artifact@v1
+      with:
+        name: website
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}     
+    - name: Azure CLI script
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.0.72
+        inlineScript: |
+          az storage blob upload-batch --account-name architectitdev -d '$web' -s website
